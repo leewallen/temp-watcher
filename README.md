@@ -1,9 +1,6 @@
 # Telegraf, InfluxDB, Grafana (TIG) Stack 
 
-
-![https://influxdata.github.io/branding/img/downloads/telegraf.jpeg](./telegraf.jpeg) <br/>
-![https://influxdata.github.io/branding/img/downloads/influxdb.jpeg](./influxdb.jpeg)  <br/>
-![https://github.com/grafana/grafana/blob/main/docs/logo-horizontal.png](./grafana_logo.png)
+![tig-stack](./tig-stack.png)
 
 Practice project for learning how to use the TIG stack. 
 
