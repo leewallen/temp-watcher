@@ -1,7 +1,7 @@
 
 
 
-# Telegraf, InfluxDB, Grafana (8.5.15 Stack 
+# Telegraf, InfluxDB, Grafana (TIG) Stack 
 
 
 ![https://influxdata.github.io/branding/img/downloads/telegraf.jpeg](./telegraf.jpeg) <br/>
