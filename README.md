@@ -23,6 +23,15 @@ docker-compose up -d
 
 Run the python app. This assumes you have one or more Phillips Hue motion sensors. You'll need to update the `tig-stack/grafana/dashboards/temperatures.json` file so that it references the appropriate sensor IDs.
 
+```bash
+ python3 ./hue-temp-sensor/src/main.py \
+   -b $BRIDGE_IP \
+   -i $INTERVAL \
+   -s 34,27 \
+   -t $TELEGRAFIP \
+   -tp $TELEGRAFPORT \
+   -u $BRIDGEUSERNAME
+```
 
 
 ## Interesting bits
