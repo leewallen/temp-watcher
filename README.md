@@ -1,6 +1,3 @@
-
-
-
 # Telegraf, InfluxDB, Grafana (TIG) Stack 
 
 
@@ -13,8 +10,6 @@ Practice project for learning how to use the TIG stack.
 ## Project Inspiration
 
 I started with [Hunter Johnston's](https://github.com/huntabyte) [TIG stack repo](https://github.com/huntabyte/tig-stack.git). I first watched [Hunter's video on YouTube](https://youtu.be/QGG_76OmRnA). The video is concise and has great information. Hunter communicates very clearly, and his YouTube channel looks like it has some great content.
-
-### Provision a Grafana dashboard and sending metrics to InfluxDB
 
 I also used [Benjamin Cremer's](https://github.com/bcremer) [docker-telegraf-influx-grafana-stack repo](https://github.com/bcremer/docker-telegraf-influx-grafana-stack) as an example of how to provision a Grafana dashboard. I had started a simple python project for playing around with my Phillip's Hue motion sensor using the Hue API, so I used that app with statsd in a way similar to Benjamin's python metric producing python app.
 

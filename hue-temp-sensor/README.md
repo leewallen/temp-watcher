@@ -10,11 +10,11 @@ The Philips Hue API has a list of sensors that are supported. The Philips Hue mo
 
 ## Command Line Args
 
-| Short Option | Long Option  | Description                                                  |
-|:------------:|:------------:|:-------------------------------------------------------------|
-|     `-b`     |  `--bridge`  | Hue Bridge IP address |
-|     `-u`     | `--username` | Username created for interacting with the Hue Bridge |
-|     `-i`     | `--interval` | Interval in seconds to check motion sensor temperature value |
-|     `-s`     | `--sensors`  | Comma separated list of Sensor IDs to monitor |
-|     `-t`     | `--telegrafip`  | IP or hostname of the Telegraf service |
-|     `-tp`     | `--telegrafport`  | Port that Telegraf is listening to for incoming messages from statsd |
+| Short Option |    Long Option     | Description                                                  |
+|:------------:|:------------------:|:-------------------------------------------------------------|
+|     `-b`     |     `--bridge`     | Hue Bridge IP address |
+|     `-u`     | `--bridgeusername` | Username created for interacting with the Hue Bridge |
+|     `-i`     |    `--interval`    | Interval in seconds to check motion sensor temperature value |
+|     `-s`     |    `--sensors`     | Comma separated list of Sensor IDs to monitor |
+|     `-t`     |   `--telegrafip`   | IP or hostname of the Telegraf service |
+|     `-tp`     |  `--telegrafport`  | Port that Telegraf is listening to for incoming messages from statsd |

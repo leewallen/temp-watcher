@@ -6,16 +6,16 @@ import statsd
 
 class MotionSensor(object):
 
-    def __init__(self, hub_ip: str = None, username: str = None, interval: int = 15, sensors: str = None, telegrafip: str = None, telegrafport: str = None):
+    def __init__(self, hub_ip: str = None, bridgeusername: str = None, interval: int = 15, sensors: str = None, telegrafip: str = None, telegrafport: str = None):
         self.last_temp = None
         self.hub_ip = hub_ip or None
-        self.username = username or None
+        self.bridgeusername = bridgeusername or None
         
         if not hub_ip:
             raise ValueError('The hub IP wasn''t provided.')
 
-        if not username:
-            raise ValueError('The username wasn''t provided.')
+        if not bridgeusername:
+            raise ValueError('The bridgeusername wasn''t provided.')
 
         if not sensors:
             raise ValueError("Please provide the motion sensors to monitor.")
@@ -51,7 +51,7 @@ class MotionSensor(object):
 
     def check_temp(self):
         for sensor in self.sensors:
-            response = requests.get(f'http://{self.hub_ip}/api/{self.username}/sensors/{sensor}', timeout=60)
+            response = requests.get(f'http://{self.hub_ip}/api/{self.bridgeusername}/sensors/{sensor}', timeout=60)
 
             if response.status_code != 200:
                 raise ValueError('Unable to get response from motion/temp sensor')
