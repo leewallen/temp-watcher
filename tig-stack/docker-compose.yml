@@ -20,7 +20,7 @@ services:
       - '8125:8125/udp'
     volumes:
       - ${TELEGRAF_CFG_PATH}:/etc/telegraf/telegraf.conf:rw
-      - ./test-metrics.in:/etc/telegraf/metrics.in
+      - ./sample-metrics.in:/etc/telegraf/sample-metrics.in
     env_file:
       - .env
     depends_on:

@@ -4,20 +4,20 @@ Based on these projects:
 - https://github.com/bcremer/docker-telegraf-influx-grafana-stack
 
 
-## Test Input Added for Telegraf
+## Test Input for Telegraf
 
-I added the following configuration to the `telegraf.conf` file to add some example metrics to InfluxDB.
+The following configuration from the `telegraf.conf` file will send sample metrics data to InfluxDB. 
 
 ```yaml
 [[inputs.file]]
-  files = ["/etc/telegraf/metrics.in"]
+  files = ["/etc/telegraf/sample-metrics.in"]
   data_format = "influx"
 
 [[outputs.file]]
   files = ["stdout"]
 ```
 
-The `docker-compose.yml` file was updated to add the `test-metrics.in` file in the `/etc/telegraf/metrics.in` location.
+The `docker-compose.yml` file has a volume mapping for mapping the `sample-metrics.in` file to the `/etc/telegraf/sample-metrics.in` location.
 
 View the sample metrics on a Mac using the following command:
 
