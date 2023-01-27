@@ -57,9 +57,11 @@ The sensor-reading topic will expect Avro messages using the follwoing schema:
 Example of registering the schema:
 
 ```shell
-
 // Register new schema
-curl -vs --stderr - -XPOST -i -H "Content-Type: application/vnd.schemaregistry.v1+json" --data '{"schema":"\"{\n \\"type\\": \\"record\\",\n \\"name\\": \\"evolution\\",\n \\"doc\\": \\"This is a sample Avro schema to get you started. Please edit\\",\n \\"namespace\\": \\"com.landoop\\",\n \\"fields\\": [\n {\n \\"name\\": \\"name\\",\n \\"type\\": \\"string\\"\n },\n {\n \\"name\\": \\"number1\\",\n \\"type\\": \\"int\\"\n },\n {\n \\"name\\": \\"number2\\",\n \\"type\\": \\"float\\"\n }\n ]\n}\""}' /api/schema-registry/subjects/FILL_IN_SUBJECT/versions
+curl -vs --stderr - -XPOST -i \
+  -H "Content-Type: application/vnd.schemaregistry.v1+json" \
+  --data '{"schema":"{\"type\":\"record\",\"name\":\"TemperatureReading\",\"namespace\":\"my.house\",\"doc\":\"Avro schema for holding a temperature sensor reading.\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"sensorId\",\"type\":\"int\"},{\"name\":\"temperature\",\"type\":\"float\"}]}"}' \
+  http://localhost:8000/api/schema-registry/subjects/sensor-reading-value/versions
 ```
 
 ### Locally
