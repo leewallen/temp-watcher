@@ -36,7 +36,7 @@ The sensor-reading topic will expect Avro messages using the follwoing schema:
   "type": "record",
   "name": "TemperatureReading",
   "namespace": "my.house",
-  "doc": "This is a sample Avro schema for holding a temperature sensor reading.",
+  "doc": "Avro schema for holding a temperature sensor reading.",
   "fields": [
     {
       "name": "name",
@@ -49,6 +49,10 @@ The sensor-reading topic will expect Avro messages using the follwoing schema:
     {
       "name": "temperature",
       "type": "float"
+    },
+    {
+      "name": "datetimeMs",
+      "type": "long"
     }
   ]
 }
@@ -57,21 +61,22 @@ The sensor-reading topic will expect Avro messages using the follwoing schema:
 Example of registering the schema:
 
 ```shell
-// Register new schema
+// Register sensor-reading schema
 curl -vs --stderr - -XPOST -i \
   -H "Content-Type: application/vnd.schemaregistry.v1+json" \
-  --data '{"schema":"{\"type\":\"record\",\"name\":\"TemperatureReading\",\"namespace\":\"my.house\",\"doc\":\"Avro schema for holding a temperature sensor reading.\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"sensorId\",\"type\":\"int\"},{\"name\":\"temperature\",\"type\":\"float\"}]}"}' \
+  --data '{"schema":"{\"type\":\"record\",\"name\":\"TemperatureReading\",\"namespace\":\"my.house\",\"doc\":\"Avro schema for holding a temperature sensor reading.\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"sensorId\",\"type\":\"int\"},{\"name\":\"temperature\",\"type\":\"float\"},{\"name\":\"datetimeMs\",\"type\":\"long\"}]}"}' \
   http://localhost:8000/api/schema-registry/subjects/sensor-reading-value/versions
 ```
 
 You can send an example Avro message to the sensor-reading topic by running the `./scripts/start-kafka-producer.sh` script.
 
-The script will run the following command. You can easily send multiple messages by cat'ing a JSON file with a JSON messages separated by newlines.
+The script will run the following command:
 
 ```shell
-echo '{"name": "Garage", "sensorId":34, "temperature": 60.50}' | docker exec -i schema-registry kafka-avro-console-producer \
+cat test-json-sensor-readings.txt | \
+  docker exec -i schema-registry kafka-avro-console-producer \
   --broker-list broker-1:19092 \
-  --topic $1 \
+  --topic sensor-reading \
   --property "schema.registry.url=http://localhost:8085" \
   --property "value.schema.id=1"
 ```
