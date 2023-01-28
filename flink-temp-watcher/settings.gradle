@@ -7,4 +7,28 @@
  * in the user manual at https://docs.gradle.org/6.5.1/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'project'
+
+pluginManagement {
+    repositories {
+        maven {
+            url './maven-repo'
+            }
+        gradlePluginPortal()
+        ivy {
+            url './ivy-repo'
+        }
+    }
+    plugins {
+        id("com.diffplug.spotless") version "6.9.0"
+        id("com.google.cloud.tools.jib") version "3.2.1"
+        id("com.adarshr.test-logger") version "3.2.0"
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'flink-temp-watcher'

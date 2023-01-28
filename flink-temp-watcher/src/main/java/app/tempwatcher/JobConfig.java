@@ -1,7 +1,7 @@
 /**
  * Provides a wrapper around the configuration for the job.
  */
-package org.myorg.quickstart;
+package app.tempwatcher;
 
 import java.util.Properties;
 
@@ -24,15 +24,21 @@ final class JobConfig {
 
     public static JobConfig create() {
         final Config appConfig = ConfigFactory.load();
-        final Config envConfig = ConfigFactory.load(
-                "application." + System.getenv("FLINK_ENV") + ".conf"
-        );
+
+        var env = System.getenv("FLINK_ENV") == null ? "local" : System.getenv("FLINK_ENV");
+
+        final Config envConfig = ConfigFactory.load("application." + env + ".conf");
 
         return new JobConfig(appConfig.withFallback(envConfig));
     }
 
     public String brokers() {
-        return config.getString("kafka.endpoints");
+        var endpoints = config.getString("kafka.endpoints");
+        return endpoints;
+    }
+
+    public String schemaRegistryUrl() {
+        return config.getString("schemaRegistry.url");
     }
 
     public Properties consumer() {

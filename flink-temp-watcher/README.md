@@ -73,6 +73,7 @@ You can send an example Avro message to the sensor-reading topic by running the 
 The script will run the following command:
 
 ```shell
+cd ./scripts
 cat test-json-sensor-readings.txt | \
   docker exec -i schema-registry kafka-avro-console-producer \
   --broker-list broker-1:19092 \

@@ -23,9 +23,9 @@ java {
 
 // artifact properties
 group = 'org.myorg.quickstart'
-version = '1.0'
-mainClassName = 'org.myorg.quickstart.StreamingJob'
-description = """Flink Quickstart Job"""
+version = '0.1'
+mainClassName = 'app.tempwatcher.StreamingJob'
+description = """Flink Temp Watcher Job"""
 
 application {
   applicationDefaultJvmArgs = ["-Dlog4j.configurationFile=conf/flink/log4j-local.properties"]
@@ -35,14 +35,7 @@ run {
     environment "FLINK_ENV", "local"
 }
 
-ext {
-    javaVersion = '1.11'
-    junitVersion = '5.8.2'
-    assertjVersion = '3.20.2'
-    flinkVersion = '1.16.0'
-    slf4jVersion = '1.7.32'
-    log4jVersion = '2.17.0'
-}
+
 
 task kafkaUp(type: Exec) {
     commandLine "docker-compose", "-p", "kafka", "-f", "docker/kafka-cluster.yml", "up"
@@ -84,7 +77,18 @@ wrapper {
 // declare where to find the dependencies of your project
 repositories {
     mavenCentral()
-    gradlePluginPortal()
+    maven { url "https://packages.confluent.io/maven/" }
+}
+
+ext {
+    avroVersion = '1.11.1'
+    junitVersion = '5.8.2'
+    assertjVersion = '3.20.2'
+    flinkVersion = '1.16.0'
+    slf4jVersion = '1.7.32'
+    log4jVersion = '2.17.0'
+    kafkaSchemaRegistryVersion = '7.3.1'
+    typesafeVersion = '1.4.0'
 }
 
 // NOTE: We cannot use "compileOnly" or "shadow" configurations since then we could not run code
@@ -138,10 +142,16 @@ dependencies {
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     implementation "org.slf4j:slf4j-log4j12:${slf4jVersion}"
+    implementation "org.apache.avro:avro:${avroVersion}"
+    implementation "org.apache.flink:flink-avro:${flinkVersion}"
+    implementation "org.apache.flink:flink-clients:${flinkVersion}"
+    implementation "org.apache.flink:flink-java:${flinkVersion}"
+    implementation "org.apache.flink:flink-s3-fs-presto:${flinkVersion}"
+    implementation "org.apache.flink:flink-avro-confluent-registry:${flinkVersion}"
+    implementation "io.confluent:kafka-schema-registry-client:${kafkaSchemaRegistryVersion}"
 
     // Supplementary Libraries
-    implementation group: 'com.typesafe', name: 'config', version: '1.4.0'
-
+    implementation "com.typesafe:config:${typesafeVersion}"
 
     // -----------------------------------------------------------------
     // Dependencies that should be part of the shadow jar, e.g connectors.
@@ -149,7 +159,7 @@ dependencies {
     flinkShadowJar "org.apache.flink:flink-connector-kafka:${flinkVersion}"
 
     // Supplementary Libraries
-    flinkShadowJar group: 'com.typesafe', name: 'config', version: '1.4.0'
+    flinkShadowJar "com.typesafe:config:${typesafeVersion}"
 
     // -----------------------------------------------------------------
     // Add test dependencies here.
