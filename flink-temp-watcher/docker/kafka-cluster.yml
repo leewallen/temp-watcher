@@ -128,3 +128,33 @@ services:
     networks:
       - kafka-net
 
+  influxdb:
+    image: influxdb:1.8.10
+    hostname: influxdb
+    env_file:
+      - .env
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb-storage:/var/lib/influxdb
+    networks:
+      - kafka-net
+
+  grafana:
+    env_file:
+      - .env
+    image: grafana/grafana-oss:8.5.15
+    volumes:
+      - grafana-storage:/var/lib/grafana:rw
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/dashboards/:/var/lib/grafana/dashboards/
+    depends_on:
+      - influxdb
+    ports:
+      - "3000:3000"
+    networks:
+      - kafka-net
+
+volumes:
+  grafana-storage:
+  influxdb-storage:

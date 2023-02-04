@@ -11,6 +11,8 @@ services:
   jobmanager:
     image: flink:1.16
     hostname: jobmanager
+    env_file:
+      - .env
     ports:
       - "8081:8081"
     command: "standalone-job"
@@ -40,4 +42,6 @@ services:
       - ../data/flink-savepoints:/tmp/flink-savepoints-directory
     networks:
       - kafka-net
+
+
 

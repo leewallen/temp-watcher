@@ -11,8 +11,8 @@ plugins {
     // https://imperceptiblethoughts.com/shadow/introduction/
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 
-    // http://xvik.github.io/gradle-quality-plugin/4.3.0/getting-started/
-    id 'ru.vyarus.quality' version '4.7.0' // no config out of the box
+    id "com.diffplug.spotless"
+
 }
 
 java {
@@ -34,7 +34,6 @@ application {
 run {
     environment "FLINK_ENV", "local"
 }
-
 
 
 task kafkaUp(type: Exec) {
@@ -135,23 +134,27 @@ dependencies {
     implementation "org.apache.flink:flink-runtime-web:${flinkVersion}"
 
     // Connectors & Formats
-    implementation group: 'org.apache.flink', name: "flink-connector-kafka", version: "${flinkVersion}"
+    implementation "org.apache.flink:flink-connector-kafka:${flinkVersion}"
 
     // Logging
     implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     implementation "org.slf4j:slf4j-log4j12:${slf4jVersion}"
-    implementation "org.apache.avro:avro:${avroVersion}"
-    implementation "org.apache.flink:flink-avro:${flinkVersion}"
+
+    flinkShadowJar "org.apache.avro:avro:${avroVersion}"
+    flinkShadowJar "org.apache.flink:flink-avro:${flinkVersion}"
     implementation "org.apache.flink:flink-clients:${flinkVersion}"
     implementation "org.apache.flink:flink-java:${flinkVersion}"
     implementation "org.apache.flink:flink-s3-fs-presto:${flinkVersion}"
-    implementation "org.apache.flink:flink-avro-confluent-registry:${flinkVersion}"
-    implementation "io.confluent:kafka-schema-registry-client:${kafkaSchemaRegistryVersion}"
-
+    flinkShadowJar "org.apache.flink:flink-avro-confluent-registry:${flinkVersion}"
+    flinkShadowJar "io.confluent:kafka-schema-registry-client:${kafkaSchemaRegistryVersion}"
+    flinkShadowJar "org.apache.flink:flink-metrics-influxdb:${flinkVersion}"
+    flinkShadowJar "org.apache.flink:flink-metrics-core:${flinkVersion}"
     // Supplementary Libraries
     implementation "com.typesafe:config:${typesafeVersion}"
+    // https://mvnrepository.com/artifact/org.influxdb/influxdb-java
+    implementation 'org.influxdb:influxdb-java:2.23'
 
     // -----------------------------------------------------------------
     // Dependencies that should be part of the shadow jar, e.g connectors.
@@ -197,4 +200,18 @@ shadowJar {
     baseName 'flink-stream-job'
     zip64 true
     configurations = [project.configurations.flinkShadowJar]
+}
+
+spotless {
+    java {
+        target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        toggleOffOn()
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }

@@ -13,4 +13,18 @@ state.savepoints.dir: file:///tmp/flink-savepoints-directory
 heartbeat.interval: 1000
 heartbeat.timeout: 5000
 
-parallelism.default: 2
+parallelism.default: 1
+
+# https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/metric_reporters/#influxdb
+metrics.reporter.influxdb.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
+metrics.reporter.influxdb.scheme: http
+metrics.reporter.influxdb.host: influxdb
+metrics.reporter.influxdb.port: 8086
+metrics.reporter.influxdb.db: flink
+metrics.reporter.influxdb.username: admin
+metrics.reporter.influxdb.password: admin
+metrics.reporter.influxdb.retentionPolicy: autogen
+metrics.reporter.influxdb.consistency: ANY
+metrics.reporter.influxdb.connectTimeout: 60000
+metrics.reporter.influxdb.writeTimeout: 60000
+metrics.reporter.influxdb.interval: 60 SECONDS
