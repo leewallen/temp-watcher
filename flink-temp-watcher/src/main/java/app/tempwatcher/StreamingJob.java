@@ -15,6 +15,7 @@ import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDeserializationSchema;
 import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroDeserializationSchema;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.PrintSinkFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
@@ -30,6 +31,7 @@ public final class StreamingJob {
   public static final String STDERR = "stderr";
   public static final String DESTINATION = "destination";
   public static final String FLINK_EXPERIMENT = "Flink Experiment";
+  public static final int WINDOW_IN_SECONDS = 600;
 
   private StreamingJob() {
     // prevents calls from subclass
@@ -39,6 +41,8 @@ public final class StreamingJob {
   public static void main(final String[] args) throws Exception {
     final JobConfig config = JobConfig.create();
     final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+    env.enableCheckpointing(300000, CheckpointingMode.EXACTLY_ONCE);
 
     final KafkaSource source =
         KafkaSource.<TemperatureReading>builder()
@@ -78,7 +82,7 @@ public final class StreamingJob {
                 (KeySelector<TemperatureReading, Tuple2<String, Integer>>)
                     value -> new Tuple2<>(value.getName().toString(), value.getSensorId()),
                 Types.TUPLE(Types.STRING, Types.INT))
-            .window(TumblingEventTimeWindows.of(Time.seconds(5)))
+            .window(TumblingEventTimeWindows.of(Time.seconds(WINDOW_IN_SECONDS)))
             .aggregate(new AverageAggregate())
             .uid(AGGREGATING)
             .name(AGGREGATING)
