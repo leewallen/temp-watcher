@@ -10,16 +10,16 @@ import org.apache.avro.message.BinaryMessageEncoder;
 import org.apache.avro.message.SchemaStore;
 import org.apache.avro.specific.SpecificData;
 
-/** Avro schema for holding a temperature sensor reading. */
+/** Avro schema for holding sensor reading average. */
 @org.apache.avro.specific.AvroGenerated
-public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
+public class SensorReadingAverage extends org.apache.avro.specific.SpecificRecordBase
     implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -7916985859365152579L;
+  private static final long serialVersionUID = -7926514499388075236L;
 
   public static final org.apache.avro.Schema SCHEMA$ =
       new org.apache.avro.Schema.Parser()
           .parse(
-              "{\"type\":\"record\",\"name\":\"SensorReading\",\"namespace\":\"my.house\",\"doc\":\"Avro schema for holding a temperature sensor reading.\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"sensorId\",\"type\":\"int\"},{\"name\":\"temperature\",\"type\":\"float\"},{\"name\":\"datetimeMs\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"}}]}");
+              "{\"type\":\"record\",\"name\":\"SensorReadingAverage\",\"namespace\":\"my.house\",\"doc\":\"Avro schema for holding sensor reading average.\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"sensorId\",\"type\":\"int\"},{\"name\":\"temperature\",\"type\":\"float\"},{\"name\":\"datetimeMs\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"}}]}");
 
   public static org.apache.avro.Schema getClassSchema() {
     return SCHEMA$;
@@ -32,10 +32,10 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
         new org.apache.avro.data.TimeConversions.TimestampMillisConversion());
   }
 
-  private static final BinaryMessageEncoder<SensorReading> ENCODER =
+  private static final BinaryMessageEncoder<SensorReadingAverage> ENCODER =
       new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
-  private static final BinaryMessageDecoder<SensorReading> DECODER =
+  private static final BinaryMessageDecoder<SensorReadingAverage> DECODER =
       new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
 
   /**
@@ -43,7 +43,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
    *
    * @return the message encoder used by this class
    */
-  public static BinaryMessageEncoder<SensorReading> getEncoder() {
+  public static BinaryMessageEncoder<SensorReadingAverage> getEncoder() {
     return ENCODER;
   }
 
@@ -52,7 +52,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
    *
    * @return the message decoder used by this class
    */
-  public static BinaryMessageDecoder<SensorReading> getDecoder() {
+  public static BinaryMessageDecoder<SensorReadingAverage> getDecoder() {
     return DECODER;
   }
 
@@ -63,12 +63,12 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
-  public static BinaryMessageDecoder<SensorReading> createDecoder(SchemaStore resolver) {
+  public static BinaryMessageDecoder<SensorReadingAverage> createDecoder(SchemaStore resolver) {
     return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
   /**
-   * Serializes this SensorReading to a ByteBuffer.
+   * Serializes this SensorReadingAverage to a ByteBuffer.
    *
    * @return a buffer holding the serialized data for this instance
    * @throws java.io.IOException if this instance could not be serialized
@@ -78,14 +78,15 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
   }
 
   /**
-   * Deserializes a SensorReading from a ByteBuffer.
+   * Deserializes a SensorReadingAverage from a ByteBuffer.
    *
    * @param b a byte buffer holding serialized data for an instance of this class
-   * @return a SensorReading instance decoded from the given buffer
+   * @return a SensorReadingAverage instance decoded from the given buffer
    * @throws java.io.IOException if the given bytes could not be deserialized into an instance of
    *     this class
    */
-  public static SensorReading fromByteBuffer(java.nio.ByteBuffer b) throws java.io.IOException {
+  public static SensorReadingAverage fromByteBuffer(java.nio.ByteBuffer b)
+      throws java.io.IOException {
     return DECODER.decode(b);
   }
 
@@ -98,7 +99,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
    * Default constructor. Note that this does not initialize fields to their default values from the
    * schema. If that is desired then one should use <code>newBuilder()</code>.
    */
-  public SensorReading() {}
+  public SensorReadingAverage() {}
 
   /**
    * All-args constructor.
@@ -108,7 +109,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
    * @param temperature The new value for temperature
    * @param datetimeMs The new value for datetimeMs
    */
-  public SensorReading(
+  public SensorReadingAverage(
       java.lang.CharSequence name,
       java.lang.Integer sensorId,
       java.lang.Float temperature,
@@ -251,47 +252,50 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
   }
 
   /**
-   * Creates a new SensorReading RecordBuilder.
+   * Creates a new SensorReadingAverage RecordBuilder.
    *
-   * @return A new SensorReading RecordBuilder
+   * @return A new SensorReadingAverage RecordBuilder
    */
-  public static my.house.SensorReading.Builder newBuilder() {
-    return new my.house.SensorReading.Builder();
+  public static my.house.SensorReadingAverage.Builder newBuilder() {
+    return new my.house.SensorReadingAverage.Builder();
   }
 
   /**
-   * Creates a new SensorReading RecordBuilder by copying an existing Builder.
+   * Creates a new SensorReadingAverage RecordBuilder by copying an existing Builder.
    *
    * @param other The existing builder to copy.
-   * @return A new SensorReading RecordBuilder
+   * @return A new SensorReadingAverage RecordBuilder
    */
-  public static my.house.SensorReading.Builder newBuilder(my.house.SensorReading.Builder other) {
+  public static my.house.SensorReadingAverage.Builder newBuilder(
+      my.house.SensorReadingAverage.Builder other) {
     if (other == null) {
-      return new my.house.SensorReading.Builder();
+      return new my.house.SensorReadingAverage.Builder();
     } else {
-      return new my.house.SensorReading.Builder(other);
+      return new my.house.SensorReadingAverage.Builder(other);
     }
   }
 
   /**
-   * Creates a new SensorReading RecordBuilder by copying an existing SensorReading instance.
+   * Creates a new SensorReadingAverage RecordBuilder by copying an existing SensorReadingAverage
+   * instance.
    *
    * @param other The existing instance to copy.
-   * @return A new SensorReading RecordBuilder
+   * @return A new SensorReadingAverage RecordBuilder
    */
-  public static my.house.SensorReading.Builder newBuilder(my.house.SensorReading other) {
+  public static my.house.SensorReadingAverage.Builder newBuilder(
+      my.house.SensorReadingAverage other) {
     if (other == null) {
-      return new my.house.SensorReading.Builder();
+      return new my.house.SensorReadingAverage.Builder();
     } else {
-      return new my.house.SensorReading.Builder(other);
+      return new my.house.SensorReadingAverage.Builder(other);
     }
   }
 
-  /** RecordBuilder for SensorReading instances. */
+  /** RecordBuilder for SensorReadingAverage instances. */
   @org.apache.avro.specific.AvroGenerated
   public static class Builder
-      extends org.apache.avro.specific.SpecificRecordBuilderBase<SensorReading>
-      implements org.apache.avro.data.RecordBuilder<SensorReading> {
+      extends org.apache.avro.specific.SpecificRecordBuilderBase<SensorReadingAverage>
+      implements org.apache.avro.data.RecordBuilder<SensorReadingAverage> {
 
     private java.lang.CharSequence name;
     private int sensorId;
@@ -308,7 +312,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      *
      * @param other The existing Builder to copy.
      */
-    private Builder(my.house.SensorReading.Builder other) {
+    private Builder(my.house.SensorReadingAverage.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.name)) {
         this.name = data().deepCopy(fields()[0].schema(), other.name);
@@ -329,11 +333,11 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
     }
 
     /**
-     * Creates a Builder by copying an existing SensorReading instance
+     * Creates a Builder by copying an existing SensorReadingAverage instance
      *
      * @param other The existing instance to copy.
      */
-    private Builder(my.house.SensorReading other) {
+    private Builder(my.house.SensorReadingAverage other) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.name)) {
         this.name = data().deepCopy(fields()[0].schema(), other.name);
@@ -368,7 +372,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      * @param value The value of 'name'.
      * @return This builder.
      */
-    public my.house.SensorReading.Builder setName(java.lang.CharSequence value) {
+    public my.house.SensorReadingAverage.Builder setName(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.name = value;
       fieldSetFlags()[0] = true;
@@ -389,7 +393,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      *
      * @return This builder.
      */
-    public my.house.SensorReading.Builder clearName() {
+    public my.house.SensorReadingAverage.Builder clearName() {
       name = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -410,7 +414,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      * @param value The value of 'sensorId'.
      * @return This builder.
      */
-    public my.house.SensorReading.Builder setSensorId(int value) {
+    public my.house.SensorReadingAverage.Builder setSensorId(int value) {
       validate(fields()[1], value);
       this.sensorId = value;
       fieldSetFlags()[1] = true;
@@ -431,7 +435,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      *
      * @return This builder.
      */
-    public my.house.SensorReading.Builder clearSensorId() {
+    public my.house.SensorReadingAverage.Builder clearSensorId() {
       fieldSetFlags()[1] = false;
       return this;
     }
@@ -451,7 +455,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      * @param value The value of 'temperature'.
      * @return This builder.
      */
-    public my.house.SensorReading.Builder setTemperature(float value) {
+    public my.house.SensorReadingAverage.Builder setTemperature(float value) {
       validate(fields()[2], value);
       this.temperature = value;
       fieldSetFlags()[2] = true;
@@ -472,7 +476,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      *
      * @return This builder.
      */
-    public my.house.SensorReading.Builder clearTemperature() {
+    public my.house.SensorReadingAverage.Builder clearTemperature() {
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -492,7 +496,7 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      * @param value The value of 'datetimeMs'.
      * @return This builder.
      */
-    public my.house.SensorReading.Builder setDatetimeMs(java.time.Instant value) {
+    public my.house.SensorReadingAverage.Builder setDatetimeMs(java.time.Instant value) {
       validate(fields()[3], value);
       this.datetimeMs = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
       fieldSetFlags()[3] = true;
@@ -513,16 +517,16 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
      *
      * @return This builder.
      */
-    public my.house.SensorReading.Builder clearDatetimeMs() {
+    public my.house.SensorReadingAverage.Builder clearDatetimeMs() {
       fieldSetFlags()[3] = false;
       return this;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public SensorReading build() {
+    public SensorReadingAverage build() {
       try {
-        SensorReading record = new SensorReading();
+        SensorReadingAverage record = new SensorReadingAverage();
         record.name =
             fieldSetFlags()[0] ? this.name : (java.lang.CharSequence) defaultValue(fields()[0]);
         record.sensorId =
@@ -541,8 +545,8 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<SensorReading> WRITER$ =
-      (org.apache.avro.io.DatumWriter<SensorReading>) MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<SensorReadingAverage> WRITER$ =
+      (org.apache.avro.io.DatumWriter<SensorReadingAverage>) MODEL$.createDatumWriter(SCHEMA$);
 
   @Override
   public void writeExternal(java.io.ObjectOutput out) throws java.io.IOException {
@@ -550,8 +554,8 @@ public class SensorReading extends org.apache.avro.specific.SpecificRecordBase
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<SensorReading> READER$ =
-      (org.apache.avro.io.DatumReader<SensorReading>) MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<SensorReadingAverage> READER$ =
+      (org.apache.avro.io.DatumReader<SensorReadingAverage>) MODEL$.createDatumReader(SCHEMA$);
 
   @Override
   public void readExternal(java.io.ObjectInput in) throws java.io.IOException {

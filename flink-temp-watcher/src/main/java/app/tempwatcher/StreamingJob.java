@@ -3,8 +3,8 @@ package app.tempwatcher;
 
 import java.time.Duration;
 import my.house.SensorReading;
+import my.house.SensorReadingAverage;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -15,7 +15,9 @@ import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDeserializationSchema;
 import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroDeserializationSchema;
+import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroSerializationSchema;
 import org.apache.flink.streaming.api.CheckpointingMode;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.PrintSinkFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
@@ -56,13 +58,17 @@ public final class StreamingJob {
             .setProperties(config.consumer())
             .build();
 
-    final KafkaSink<String> kafkaSink =
-        KafkaSink.<String>builder()
+    final KafkaSink<SensorReadingAverage> kafkaSink =
+        KafkaSink.<SensorReadingAverage>builder()
             .setBootstrapServers(config.brokers())
             .setRecordSerializer(
                 KafkaRecordSerializationSchema.builder()
                     .setTopic(SENSOR_READING_AVG)
-                    .setValueSerializationSchema(new SimpleStringSchema())
+                    .setValueSerializationSchema(
+                        ConfluentRegistryAvroSerializationSchema.forSpecific(
+                            SensorReadingAverage.class,
+                            "sensor-reading-avg-value",
+                            config.schemaRegistryUrl()))
                     .build())
             .setDeliverGuarantee(DeliveryGuarantee.NONE)
             .setKafkaProducerConfig(config.producer())
@@ -76,7 +82,7 @@ public final class StreamingJob {
                 .withTimestampAssigner((event, timestamp) -> event.getDatetimeMs().toEpochMilli()),
             SOURCE_TOPIC);
 
-    final var stream =
+    DataStream<SensorReadingAverage> stream =
         ds.uid(SENSOR_READING)
             .keyBy(
                 (KeySelector<SensorReading, Tuple2<String, Integer>>)
@@ -86,9 +92,9 @@ public final class StreamingJob {
             .aggregate(new AverageAggregate())
             .uid(AGGREGATING)
             .name(AGGREGATING)
-            .map(new MapTupleToString());
+            .map(new MapTupleToSensorAverage());
 
-    final var printFunction = new PrintSinkFunction<>(false);
+    final var printFunction = new PrintSinkFunction<SensorReadingAverage>(false);
     stream.addSink(printFunction).name(STDERR);
     stream.sinkTo(kafkaSink).name(DESTINATION);
 

@@ -37,6 +37,7 @@ run {
 
 task generateAvroJava(type: Exec) {
     commandLine "java", "-jar", "scripts/avro-tools-1.11.1.jar", "compile", "schema", "scripts/sensor_reading.avsc", "src/main/java/"
+    commandLine "java", "-jar", "scripts/avro-tools-1.11.1.jar", "compile", "schema", "scripts/sensor_reading_avg.avsc", "src/main/java/"
 }
 
 task kafkaUp(type: Exec) {
@@ -51,8 +52,10 @@ task stopJob(type: Exec) {
     commandLine "docker-compose", "-p", "flink", "-f", "docker/flink-job-cluster.yml", "down"
 }
 
-task registerSchema(type: Exec) {
-    commandLine "/bin/bash", "scripts/register-sensor-reading-schema.sh", "scripts/sensor_reading.avsc"
+task registerSchemas(type: Exec) {
+    commandLine "/bin/bash", "scripts/register-schema.sh", "scripts/sensor_reading.avsc", "sensor-reading-value"
+    commandLine "/bin/bash", "scripts/register-schema.sh", "scripts/sensor_reading_avg.avsc", "sensor-reading-avg-value"
+
 }
 
 task startJob(type: Exec, dependsOn: 'stopJob') {
@@ -60,7 +63,7 @@ task startJob(type: Exec, dependsOn: 'stopJob') {
 }
 
 task createTopics(type: Exec) {
-    dependsOn registerSchema
+    dependsOn registerSchemas
     commandLine "./scripts/create-topics.sh", "sensor-reading", "sensor-reading-avg"
 }
 
