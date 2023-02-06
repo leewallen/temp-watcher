@@ -1,6 +1,11 @@
 #!/bin/bash
+echo "PWD = $PWD"
+echo "CWD = $CWD"
 
-curl -vs --stderr - -XPOST -i \
+schema_value=$(cat $1 | jq -c '.' | jq -R -s '.')
+schema_to_register="{\"schema\":"$schema_value"}"
+
+echo -e $schema_to_register | curl -vs --stderr - -XPOST -i \
   -H "Content-Type: application/vnd.schemaregistry.v1+json" \
-  --data '{"schema":"{\"type\":\"record\",\"name\":\"TemperatureReading\",\"namespace\":\"my.house\",\"doc\":\"Avro schema for holding a temperature sensor reading.\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"sensorId\",\"type\":\"int\"},{\"name\":\"temperature\",\"type\":\"float\"},{\"name\":\"datetimeMs\",\"type\":\"long\"}]}"}' \
+  --data @- \
   http://localhost:8000/api/schema-registry/subjects/sensor-reading-value/versions

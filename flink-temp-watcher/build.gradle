@@ -35,6 +35,9 @@ run {
     environment "FLINK_ENV", "local"
 }
 
+task generateAvroJava(type: Exec) {
+    commandLine "java", "-jar", "scripts/avro-tools-1.11.1.jar", "compile", "schema", "scripts/sensor_reading.avsc", "src/main/java/"
+}
 
 task kafkaUp(type: Exec) {
     commandLine "docker-compose", "-p", "kafka", "-f", "docker/kafka-cluster.yml", "up"
@@ -45,19 +48,24 @@ task kafkaDown(type: Exec) {
 }
 
 task stopJob(type: Exec) {
-  commandLine "docker-compose", "-p", "flink", "-f", "docker/flink-job-cluster.yml", "down"
+    commandLine "docker-compose", "-p", "flink", "-f", "docker/flink-job-cluster.yml", "down"
+}
+
+task registerSchema(type: Exec) {
+    commandLine "/bin/bash", "scripts/register-sensor-reading-schema.sh", "scripts/sensor_reading.avsc"
 }
 
 task startJob(type: Exec, dependsOn: 'stopJob') {
-  commandLine "docker-compose", "-p", "flink", "-f", "docker/flink-job-cluster.yml", "up", "-d"
+    commandLine "docker-compose", "-p", "flink", "-f", "docker/flink-job-cluster.yml", "up", "-d"
 }
 
 task createTopics(type: Exec) {
-  commandLine "./scripts/create-topics.sh", "sensor-reading", "sensor-reading-aggregated"
+    dependsOn registerSchema
+    commandLine "./scripts/create-topics.sh", "sensor-reading", "sensor-reading-avg"
 }
 
 task grafanaDown(type: Exec) {
-  commandLine "docker-compose", "-p", "grafana", "-f", "docker/grafana-elastic-logstash.yml", "down"
+    commandLine "docker-compose", "-p", "grafana", "-f", "docker/grafana-elastic-logstash.yml", "down"
 }
 
 task grafanaUp(type: Exec) {

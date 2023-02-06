@@ -2,7 +2,7 @@
 package app.tempwatcher;
 
 import java.time.Duration;
-import my.house.TemperatureReading;
+import my.house.SensorReading;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.Types;
@@ -45,14 +45,14 @@ public final class StreamingJob {
     env.enableCheckpointing(300000, CheckpointingMode.EXACTLY_ONCE);
 
     final KafkaSource source =
-        KafkaSource.<TemperatureReading>builder()
+        KafkaSource.<SensorReading>builder()
             .setBootstrapServers(config.brokers())
             .setStartingOffsets(OffsetsInitializer.latest())
             .setTopics(SENSOR_READING)
             .setDeserializer(
                 KafkaRecordDeserializationSchema.valueOnly(
                     ConfluentRegistryAvroDeserializationSchema.forSpecific(
-                        TemperatureReading.class, config.schemaRegistryUrl())))
+                        SensorReading.class, config.schemaRegistryUrl())))
             .setProperties(config.consumer())
             .build();
 
@@ -71,15 +71,15 @@ public final class StreamingJob {
     final var ds =
         env.fromSource(
             source,
-            WatermarkStrategy.<TemperatureReading>forBoundedOutOfOrderness(Duration.ofMillis(0))
+            WatermarkStrategy.<SensorReading>forBoundedOutOfOrderness(Duration.ofMillis(0))
                 .withIdleness(Duration.ofSeconds(10))
-                .withTimestampAssigner((event, timestamp) -> event.getDatetimeMs()),
+                .withTimestampAssigner((event, timestamp) -> event.getDatetimeMs().toEpochMilli()),
             SOURCE_TOPIC);
 
     final var stream =
         ds.uid(SENSOR_READING)
             .keyBy(
-                (KeySelector<TemperatureReading, Tuple2<String, Integer>>)
+                (KeySelector<SensorReading, Tuple2<String, Integer>>)
                     value -> new Tuple2<>(value.getName().toString(), value.getSensorId()),
                 Types.TUPLE(Types.STRING, Types.INT))
             .window(TumblingEventTimeWindows.of(Time.seconds(WINDOW_IN_SECONDS)))

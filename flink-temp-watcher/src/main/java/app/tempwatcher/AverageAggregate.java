@@ -1,6 +1,6 @@
 package app.tempwatcher;
 
-import my.house.TemperatureReading;
+import my.house.SensorReading;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -8,7 +8,7 @@ import org.apache.flink.api.java.tuple.Tuple5;
 /** AverageAggregate. */
 public class AverageAggregate
     implements AggregateFunction<
-        TemperatureReading,
+        SensorReading,
         Tuple5<String, Integer, Long, Float, Long>,
         Tuple4<String, Integer, Long, Double>> {
   @Override
@@ -18,12 +18,11 @@ public class AverageAggregate
 
   @Override
   public Tuple5<String, Integer, Long, Float, Long> add(
-      final TemperatureReading value,
-      final Tuple5<String, Integer, Long, Float, Long> accumulator) {
+      final SensorReading value, final Tuple5<String, Integer, Long, Float, Long> accumulator) {
     return new Tuple5<>(
         value.getName().toString(),
         value.getSensorId(),
-        value.getDatetimeMs(),
+        value.getDatetimeMs().toEpochMilli(),
         accumulator.f3 + value.getTemperature(),
         accumulator.f4 + 1L);
   }

@@ -1,4 +1,5 @@
 import datetime
+
 import requests
 import statsd
 from confluent_kafka import Producer
@@ -18,7 +19,7 @@ class SensorReading(object):
         datetimeMs (long): DateTime in milliseconds from when the reading was taken
     """
 
-    def __init__(self, name, sensorId, temperature, datetimeMs):
+    def __init__(self, name: str, sensorId: int, temperature: float, datetimeMs: int):
         self.name = name
         self.sensorId = sensorId
         self.temperature = temperature
@@ -157,16 +158,18 @@ class MotionSensor(object):
             name=str(sensor_id),
             sensorId=sensor_id,
             temperature=temp_value,
-            datetimeMs=datetime_ms)
+            datetimeMs=datetime_ms
+        )
 
-        self.producer.produce(topic=self.target_topic,
-                              key=self.string_serializer(str(uuid4())),
-                              value=self.avro_serializer(
-                                  sensor_reading,
-                                  SerializationContext(
-                                      self.target_topic,
-                                      MessageField.VALUE)),
-                              on_delivery=self.delivery_report)
+        self.producer.produce(
+            topic=self.target_topic, key=None,
+            value=self.avro_serializer(sensor_reading,
+                                       SerializationContext(
+                                            self.target_topic,
+                                            MessageField.VALUE
+                                        )),
+            on_delivery=self.delivery_report
+        )
 
     def validate_args(self):
         if not self.hub_ip:
