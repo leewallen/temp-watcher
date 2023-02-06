@@ -1,5 +1,10 @@
 version: "3"
 
+networks:
+  temp-net:
+    name: temp-net
+    driver: bridge
+
 services:
   influxdb:
     image: influxdb:2.6
@@ -11,6 +16,8 @@ services:
       - .env
     entrypoint: ["./entrypoint.sh"]
     restart: on-failure:10
+    networks:
+      - temp-net
 
 
   telegraf:
@@ -24,6 +31,8 @@ services:
       - .env
     depends_on:
       - influxdb
+    networks:
+      - temp-net
 
   grafana:
     env_file:
@@ -31,12 +40,15 @@ services:
     image: grafana/grafana-oss:8.5.15
     volumes:
       - grafana-storage:/var/lib/grafana:rw
+      - ./grafana/conf/grafana.ini:/etc/grafana/grafana.ini:rw
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana/dashboards/:/var/lib/grafana/dashboards/
     depends_on:
       - influxdb
     ports:
       - ${GRAFANA_PORT}:3000
+    networks:
+      - temp-net
 
 volumes:
   grafana-storage:

@@ -146,6 +146,7 @@ services:
     image: grafana/grafana-oss:8.5.15
     volumes:
       - grafana-storage:/var/lib/grafana:rw
+      - ./grafana/conf/grafana.ini:/etc/grafana/grafana.ini:rw
       - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana/dashboards/:/var/lib/grafana/dashboards/
     depends_on:
