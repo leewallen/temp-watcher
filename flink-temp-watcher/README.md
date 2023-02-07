@@ -221,6 +221,7 @@ After starting the job with one of the methods above, let's observe it reading a
 
 1. Start the job using one of the methods above.
 1. In a new terminal send data to the source Kafka topic by running `./scripts/start-kafka-producer.sh sensor-reading`
-1. Navigate to the [Kafdrop](http://localhost:8001/#/) and view the messages both the `source` and `destination` topics. Be sure to change format to default or else you will not see any messages.
+1. To see the Avro schemas in the schema registry, navigate to the [schema registry UI](http://localhost:8000/).
+1. Navigate to the [Kafdrop](http://localhost:8001/) and view the messages for both the `sensor-reading` and `sensor-reading-avg` topics.
 1. Watch the Flink application operation metrics in the [Sensor Ops Grafana dashboard](http://localhost:3000)
 
